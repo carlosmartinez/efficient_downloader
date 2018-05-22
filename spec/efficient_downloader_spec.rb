@@ -51,8 +51,16 @@ RSpec.describe EfficientDownloader do
       end
     end
 
-    context "response is 403" do
+    context "response is 401" do
       let(:response_class) { Net::HTTPUnauthorized }
+
+      it "errors" do
+        expect { subject }.to raise_error(EfficientDownloader::FileDownloadError)
+      end
+    end
+
+    context "response is 403" do
+      let(:response_class) { Net::HTTPForbidden }
 
       it "errors" do
         expect { subject }.to raise_error(EfficientDownloader::FileDownloadError)

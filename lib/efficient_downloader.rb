@@ -23,6 +23,8 @@ module EfficientDownloader
           redirect_uri = response["location"]
         elsif response.is_a?(Net::HTTPUnauthorized)
           raise FileDownloadError, "File download was not authorised."
+        elsif response.is_a?(Net::HTTPForbidden)
+          raise FileDownloadError, "File download was not authorised."
         elsif response.is_a?(Net::HTTPNotFound)
           raise FileDownloadError, "Specified file could not be found."
         elsif response.is_a?(Net::HTTPInternalServerError)
