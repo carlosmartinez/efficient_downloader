@@ -1,15 +1,17 @@
 # EfficientDownloader
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/efficient_downloader`. To experiment with that code, run `bin/console` for an interactive prompt.
+This is a very simple library that takes a bit of pain out of downloading files in Ruby. Helpful things that it does:
 
-TODO: Delete this and the text above, and describe your gem
+1. If the response code is 301 or 302, it pulls out the redirect header and follow it.
+
+2. It downloads a stream and writes to disk chunk by chunk, so the file doesn't get loaded into memory. With very big files, this is a good thing.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'efficient_downloader'
+gem "efficient_downloader"
 ```
 
 And then execute:
@@ -22,13 +24,19 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```
+from = "https://location.on.the/internet.mp4"
+to = "/tmp/location/on/a/drive.mp4"
+begin
+  EfficientDownloader.download(from, to)
+rescue FileDownloadError => e
+  puts "Nice try, but this happened... #{e.message}"
+end
+```
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Feel free to fork and raise a pull request.
 
 ## Contributing
 
