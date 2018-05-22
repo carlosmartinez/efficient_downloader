@@ -1,15 +1,15 @@
 require "efficient_downloader/version"
 require "fileutils"
 
-class FileDownloadError < StandardError
-  DEFAULT_MESSAGE = "There was a problem downloading the specified file"
-
-  def initialize(message = DEFAULT_MESSAGE)
-    super(message)
-  end
-end
-
 module EfficientDownloader
+  class FileDownloadError < StandardError
+    DEFAULT_MESSAGE = "There was a problem downloading the specified file"
+
+    def initialize(message = DEFAULT_MESSAGE)
+      super(message)
+    end
+  end
+
   def self.download(from, to)
     uri = URI.parse(from)
     request = Net::HTTP::Get.new(uri.request_uri)

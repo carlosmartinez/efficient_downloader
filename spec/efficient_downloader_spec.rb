@@ -55,7 +55,7 @@ RSpec.describe EfficientDownloader do
       let(:response_class) { Net::HTTPUnauthorized }
 
       it "errors" do
-        expect { subject }.to raise_error(FileDownloadError)
+        expect { subject }.to raise_error(EfficientDownloader::FileDownloadError)
       end
     end
 
@@ -63,7 +63,7 @@ RSpec.describe EfficientDownloader do
       let(:response_class) { Net::HTTPInternalServerError }
 
       it "errors" do
-        expect { subject }.to raise_error(FileDownloadError)
+        expect { subject }.to raise_error(EfficientDownloader::FileDownloadError)
       end
     end
 
