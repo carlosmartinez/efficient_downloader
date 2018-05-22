@@ -19,7 +19,7 @@ RSpec.describe EfficientDownloader do
     allow(File).to receive(:open)
   end
 
-  describe "#download" do
+  describe ".download" do
     before do
       allow(response).to receive(:is_a?).with(response_class) { true }
     end
@@ -80,6 +80,29 @@ RSpec.describe EfficientDownloader do
       it "calls Net::HTTP.start with appropriate params" do
         expect(Net::HTTP).to receive(:start).with("host.net", 443, use_ssl: true)
         subject
+      end
+    end
+  end
+
+  describe "directory creation" do
+    before do
+      allow(File).to receive(:directory?).with("./tmp").and_return(dir_exists)
+      allow(FileUtils).to receive(:mkdir_p)
+    end
+
+    context "directory already exists" do
+      let(:dir_exists) { true }
+      it "doesn't create a directory" do
+        subject
+        expect(FileUtils).not_to have_received(:mkdir_p)
+      end
+    end
+
+    context "directory doesn't exist" do
+      let(:dir_exists) { false }
+      it "doesn't create a directory" do
+        subject
+        expect(FileUtils).to have_received(:mkdir_p).with("./tmp")
       end
     end
   end

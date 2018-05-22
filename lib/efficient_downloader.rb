@@ -1,4 +1,5 @@
 require "efficient_downloader/version"
+require "fileutils"
 
 class FileDownloadError < StandardError
   DEFAULT_MESSAGE = "There was a problem downloading the specified file"
@@ -27,10 +28,16 @@ module EfficientDownloader
         elsif response.is_a?(Net::HTTPInternalServerError)
           raise FileDownloadError, "Host of specified file returned an error."
         else
+          ensure_directory(to)
           File.open(to, "wb") { |io| response.read_body { |chunk| io.write(chunk) } }
         end
       end
     end
     download(redirect_uri, to) if redirect_uri
+  end
+
+  def self.ensure_directory(to)
+    dirname = File.dirname(to)
+    FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
   end
 end
