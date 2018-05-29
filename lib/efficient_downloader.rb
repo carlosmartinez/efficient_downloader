@@ -12,9 +12,12 @@ module EfficientDownloader
 
   def self.download(from, to)
     uri = URI.parse(from)
+    raise FileDownloadError, "Invalid URL" unless uri.is_a?(URI::HTTP)
+
     request = Net::HTTP::Get.new(uri.request_uri)
     redirect_uri = nil
     use_ssl = uri.scheme == "https"
+
     Net::HTTP.start(uri.host, uri.port, use_ssl: use_ssl) do |http|
       http.request(request) do |response|
         if response.is_a?(Net::HTTPFound)

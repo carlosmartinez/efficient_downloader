@@ -90,6 +90,14 @@ RSpec.describe EfficientDownloader do
         subject
       end
     end
+
+    context "invalid url" do
+      let(:from) { "this-is-not-a-reasonable-url" }
+
+      it "errors" do
+        expect { subject }.to raise_error(EfficientDownloader::FileDownloadError)
+      end
+    end
   end
 
   describe "directory creation" do
