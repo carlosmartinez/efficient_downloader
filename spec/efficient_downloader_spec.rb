@@ -98,6 +98,15 @@ RSpec.describe EfficientDownloader do
         expect { subject }.to raise_error(EfficientDownloader::FileDownloadError)
       end
     end
+
+    context "unreachable host" do
+      let(:from) { "https://www.clearly-non-existent.com/falafel" }
+      before { allow(Net::HTTP).to receive(:start).and_raise(SocketError) }
+
+      it "errors" do
+        expect { subject }.to raise_error(EfficientDownloader::FileDownloadError)
+      end
+    end
   end
 
   describe "directory creation" do

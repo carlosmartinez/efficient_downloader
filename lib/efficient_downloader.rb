@@ -39,6 +39,8 @@ module EfficientDownloader
       end
     end
     download(redirect_uri, to) if redirect_uri
+  rescue SocketError
+    raise FileDownloadError, "The specified host could not be found."
   end
 
   def self.ensure_directory(to)
