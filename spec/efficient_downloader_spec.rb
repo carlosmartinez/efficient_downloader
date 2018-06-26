@@ -51,6 +51,16 @@ RSpec.describe EfficientDownloader do
       end
     end
 
+    context "response is 307" do
+      let(:response_class) { Net::HTTPTemporaryRedirect }
+
+      it "fetches the response location" do
+        expect(File).not_to receive(:open)
+        expect(response).to receive(:[]).with("location")
+        subject
+      end
+    end
+
     context "response is 401" do
       let(:response_class) { Net::HTTPUnauthorized }
 

@@ -24,6 +24,8 @@ module EfficientDownloader
           redirect_uri = response["location"]
         elsif response.is_a?(Net::HTTPMovedPermanently)
           redirect_uri = response["location"]
+        elsif response.is_a?(Net::HTTPTemporaryRedirect)
+          redirect_uri = response["location"]
         elsif response.is_a?(Net::HTTPUnauthorized)
           raise FileDownloadError, "File download was not authorised."
         elsif response.is_a?(Net::HTTPForbidden)
