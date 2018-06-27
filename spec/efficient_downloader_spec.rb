@@ -8,8 +8,9 @@ RSpec.describe EfficientDownloader do
   let(:request)        { instance_double(Net::HTTP::Get) }
   let(:response)       { double }
   let(:response_class) { Net::HTTPOK }
+  let(:headers)        { nil }
 
-  subject { EfficientDownloader.download(from, to) }
+  subject { EfficientDownloader.download(from, to, headers) }
 
   before do
     allow(Net::HTTP::Get).to receive(:new).and_return(request)
@@ -115,6 +116,17 @@ RSpec.describe EfficientDownloader do
 
       it "errors" do
         expect { subject }.to raise_error(EfficientDownloader::FileDownloadError)
+      end
+    end
+
+    context "auth token in headers" do
+      let(:headers) do
+        { "Authorization" => "Bearer 12345" }
+      end
+
+      it "adds header to request" do
+        expect(request).to receive(:[]=).with("Authorization", "Bearer 12345")
+        subject
       end
     end
   end

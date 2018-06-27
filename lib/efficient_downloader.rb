@@ -10,11 +10,13 @@ module EfficientDownloader
     end
   end
 
-  def self.download(from, to)
+  def self.download(from, to, headers = nil)
     uri = URI.parse(from)
     raise FileDownloadError, "Invalid URL" unless uri.is_a?(URI::HTTP)
 
     request = Net::HTTP::Get.new(uri.request_uri)
+    headers.each { |header| request[header.first] = header.last } if headers
+
     redirect_uri = nil
     use_ssl = uri.scheme == "https"
 
@@ -40,7 +42,7 @@ module EfficientDownloader
         end
       end
     end
-    download(redirect_uri, to) if redirect_uri
+    download(redirect_uri, to, headers) if redirect_uri
   rescue SocketError
     raise FileDownloadError, "The specified host could not be found."
   end
