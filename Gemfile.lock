@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    efficient_downloader (0.3.6)
+    efficient_downloader (0.3.7)
 
 GEM
   remote: https://rubygems.org/

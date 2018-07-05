@@ -12,7 +12,9 @@ module EfficientDownloader
 
   def self.download(from, to, headers = nil)
     uri = URI.parse(from)
-    raise FileDownloadError, "Invalid URL" unless uri.is_a?(URI::HTTP)
+    unless uri.is_a?(URI::HTTP)
+      raise FileDownloadError, "Invalid URL"
+    end
 
     request = Net::HTTP::Get.new(uri.request_uri)
     headers.each { |header| request[header.first] = header.last } if headers
