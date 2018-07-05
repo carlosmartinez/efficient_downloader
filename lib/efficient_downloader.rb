@@ -12,9 +12,7 @@ module EfficientDownloader
 
   def self.download(from, to, headers = nil)
     uri = URI.parse(from)
-    unless uri.is_a?(URI::HTTP)
-      raise FileDownloadError, "Invalid URL"
-    end
+    raise FileDownloadError, "Invalid URL" unless uri.is_a?(URI::HTTP)
 
     request = Net::HTTP::Get.new(uri.request_uri)
     headers.each { |header| request[header.first] = header.last } if headers
@@ -44,9 +42,19 @@ module EfficientDownloader
         end
       end
     end
-    download(redirect_uri, to, headers) if redirect_uri
+    if redirect_uri
+      sanitized = sanitized_redirect_uri(redirect_uri, uri)
+      download(sanitized, to, headers)
+    end
   rescue SocketError
     raise FileDownloadError, "The specified host could not be found."
+  end
+
+  def self.sanitized_redirect_uri(redirect_uri, original_uri)
+    uri = URI.parse(redirect_uri)
+    return redirect_uri if uri.is_a?(URI::HTTP)
+    redirect_path = redirect_uri
+    "#{original_uri.scheme}://#{original_uri.host}#{redirect_path}"
   end
 
   def self.ensure_directory(to)

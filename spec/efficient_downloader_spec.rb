@@ -153,4 +153,19 @@ RSpec.describe EfficientDownloader do
       end
     end
   end
+
+  describe ".sanitized_redirect_uri" do
+    let(:uri) { URI.parse(from) }
+    subject { described_class.sanitized_redirect_uri(redirect_uri, uri) }
+
+    context "redirect_uri includes host" do
+      let(:redirect_uri) { "https://www.sujuk.com/tabbouleh" }
+      it { is_expected.to eq redirect_uri }
+    end
+
+    context "redirect_uri is just a path" do
+      let(:redirect_uri) { "/tabbouleh" }
+      it { is_expected.to eq "https://host.net/tabbouleh" }
+    end
+  end
 end
